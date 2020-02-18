@@ -47,7 +47,7 @@ public class SplitTextFile {
         writer = new BufferedWriter(new FileWriter(curOutputName));
         int c;
         String s;
-        if (sizeInSymbols) while ((c = reader.read()) != -1) writeToFile("" + c);
+        if (sizeInSymbols) while ((c = reader.read()) != -1) writeToFile("" + (char) c);
         else while ((s = reader.readLine()) != null) writeToFile(s + "\n");
     }
 
@@ -58,9 +58,8 @@ public class SplitTextFile {
             if (arrayStr[i].matches("-d")) namesWithDigits = true;
             else if (arrayStr[i].matches("-o [a-zA-Z-]+")) {
                 if (flagForOutputName) throw new IllegalArgumentException("Выходное имя дожно быть одно");
+                outputName = arrayStr[i].split("-o ")[1];
                 flagForOutputName = true;
-                String[] temp = arrayStr[i].split("-o ");
-                outputName = temp[1];
             }
             else if (arrayStr[i].matches("-l [1-9][0-9]*")) setSize(SizeIn.LINES, arrayStr[i], "-l ");
             else if (arrayStr[i].matches("-c [1-9][0-9]*")) setSize(SizeIn.SYMBOLS, arrayStr[i], "-c ");
@@ -81,15 +80,14 @@ public class SplitTextFile {
             size = (int) Math.ceil(((double) amountOfLines) / size);
             createOutputFiles(false);
         }
+        else {
+            size = 100;
+            createOutputFiles(false);
+        }
         writer.close();
         reader.close();
         namesWithDigits = false;
         flagForOutputName = false;
         sizeInWhat = SizeIn.DEFAULT;
-    }
-
-    public static void main(String[] args) throws IOException {
-        SplitTextFile text = new SplitTextFile();
-        text.execution("split [-d] [-n 3] [-o fff] textFiles/align_in1.txt");
     }
 }
