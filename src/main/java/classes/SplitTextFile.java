@@ -1,15 +1,20 @@
 package classes;
 
 import java.io.*;
+import org.kohsuke.args4j.Argument;
+import org.kohsuke.args4j.Option;
 
 public class SplitTextFile {
-    private int size, numberOutputFile, previousNumberOutputFile, count;
-    private boolean namesWithDigits, flagForOutputName;
-    private enum SizeIn { LINES, SYMBOLS, AMOUNT_OF_FILES, DEFAULT }
-    private SizeIn sizeInWhat = SizeIn.DEFAULT;
-    private String outputName, curOutputName;
+    private int numberOutputFile, previousNumberOutputFile, count;
+    private String curOutputName;
     private BufferedReader reader;
     private BufferedWriter writer;
+    @Option(name = "-o") private String outputName = "x";
+    @Option(name = "-d") private boolean namesWithDigits;
+    @Option(name = "-l") private int sizeInLines = -1;
+    @Option(name = "-c") private int sizeInSymbols = -1;
+    @Option(name = "-n") private int sizeInAmountOfFiles = -1;
+    @Argument private String[] arguments;
 
     private String getOutputNameWithCharAtTheEnd() {
         String temp = outputName;
@@ -18,13 +23,7 @@ public class SplitTextFile {
         return temp;
     }
 
-    private void setSize(SizeIn sizeIn, String str, String regex) {
-        if (sizeInWhat != SizeIn.DEFAULT) throw new IllegalArgumentException("Введено больше одного флага для размера");
-        sizeInWhat = sizeIn;
-        size = Integer.parseInt(str.split(regex)[1]);
-    }
-
-    private void writeToFile(String whatWrite) throws IOException {
+    private void writeToFile(String whatWrite, int size) throws IOException {
         if (previousNumberOutputFile != numberOutputFile) {
             previousNumberOutputFile = numberOutputFile;
             writer = new BufferedWriter(new FileWriter(curOutputName));
@@ -39,7 +38,7 @@ public class SplitTextFile {
         }
     }
 
-    private void createOutputFiles(boolean sizeInSymbols) throws IOException {
+    private void createOutputFiles(boolean sizeInSymbols, int size) throws IOException {
         count = size;
         numberOutputFile = 1;
         previousNumberOutputFile = numberOutputFile;
@@ -47,47 +46,30 @@ public class SplitTextFile {
         writer = new BufferedWriter(new FileWriter(curOutputName));
         int c;
         String s;
-        if (sizeInSymbols) while ((c = reader.read()) != -1) writeToFile("" + (char) c);
-        else while ((s = reader.readLine()) != null) writeToFile(s + "\n");
+        if (sizeInSymbols) while ((c = reader.read()) != -1) writeToFile("" + (char) c, size);
+        else while ((s = reader.readLine()) != null) writeToFile(s + "\n", size);
     }
 
-    public void execution(String input) throws IOException {
-        if (!input.matches("split *(\\[.*\\])+ *[a-zA-z/_0-9.]+")) throw new IllegalArgumentException("Некорректный ввод");
-        String[] arrayStr = input.split("( *\\[)|(\\] *\\[)|(\\] *)");
-        for (int i = 1; i < arrayStr.length - 1; i++) {
-            if (arrayStr[i].matches("-d")) namesWithDigits = true;
-            else if (arrayStr[i].matches("-o [a-zA-Z-]+")) {
-                if (flagForOutputName) throw new IllegalArgumentException("Выходное имя дожно быть одно");
-                outputName = arrayStr[i].split("-o ")[1];
-                flagForOutputName = true;
-            }
-            else if (arrayStr[i].matches("-l [1-9][0-9]*")) setSize(SizeIn.LINES, arrayStr[i], "-l ");
-            else if (arrayStr[i].matches("-c [1-9][0-9]*")) setSize(SizeIn.SYMBOLS, arrayStr[i], "-c ");
-            else if (arrayStr[i].matches("-n [1-9][0-9]*")) setSize(SizeIn.AMOUNT_OF_FILES, arrayStr[i], "-n ");
-            else throw new IllegalArgumentException("Некорректный ввод");
-        }
-        reader = new BufferedReader(new FileReader(arrayStr[arrayStr.length - 1]));
+    public void execute() throws IOException {
+        if (arguments.length != 2 || !arguments[0].equals("split"))
+            throw new IllegalArgumentException("Некорректный ввод");
+        String inputName = arguments[1];
+        reader = new BufferedReader(new FileReader(inputName));
         count = 0;
-        if (!flagForOutputName) outputName = "x";
-        if (outputName.equals("-")) outputName = arrayStr[arrayStr.length - 1];
-        if (sizeInWhat == SizeIn.LINES) createOutputFiles(false);
-        else if (sizeInWhat == SizeIn.SYMBOLS) createOutputFiles(true);
-        else if (sizeInWhat == SizeIn.AMOUNT_OF_FILES) {
+        if (outputName.equals("-")) outputName = inputName;
+        if (sizeInLines != -1) createOutputFiles(false, sizeInLines);
+        else if (sizeInSymbols != -1) createOutputFiles(true, sizeInSymbols);
+        else if (sizeInAmountOfFiles != -1) {
             int amountOfLines = 0;
             while (reader.readLine() != null) amountOfLines++;
             reader.close();
-            reader = new BufferedReader(new FileReader(arrayStr[arrayStr.length - 1]));
-            size = (int) Math.ceil(((double) amountOfLines) / size);
-            createOutputFiles(false);
+            reader = new BufferedReader(new FileReader(inputName));
+            sizeInLines = (int) Math.ceil(((double) amountOfLines) / sizeInAmountOfFiles);
+            createOutputFiles(false, sizeInLines);
         }
-        else {
-            size = 100;
-            createOutputFiles(false);
-        }
+        else createOutputFiles(false, 100);
         writer.close();
         reader.close();
         namesWithDigits = false;
-        flagForOutputName = false;
-        sizeInWhat = SizeIn.DEFAULT;
     }
 }
