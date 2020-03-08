@@ -10,9 +10,7 @@ import java.nio.file.Paths;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SplitTextFileTest {
-
-    SplitTextFile text = new SplitTextFile();
-
+    
     String firstStr = "Для написания разных видов программ сейчас применяются разные языки программирования.\n"
             + "Например, в сфере мобильных программ сейчас правят бал языки Swift (мобильные устройства под управлением iOS)\n"
             + "и Java (устройства под управлением Android).\n" + "Системные программы, как правило, пишутся на языках C или {cpp}.\n"
