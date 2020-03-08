@@ -1,15 +1,16 @@
 package classes;
 
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SplitTextFileTest {
 
-    @Test
-    public void test1() {
-        MainProgram.main("split -d -n 3 -o fff textFiles/align_in1.txt".split(" "));
-    }
-    /*
     SplitTextFile text = new SplitTextFile();
 
     String firstStr = "Для написания разных видов программ сейчас применяются разные языки программирования.\n"
@@ -32,7 +33,7 @@ class SplitTextFileTest {
 
     @Test
     public void test1() throws IOException {
-        text.execute("split [-d] [-n 3] [-o fff] textFiles/align_in1.txt");
+        MainProgram.main("split -d -n 3 -o fff textFiles/align_in1.txt".split(" +"));
         assertTrue(new String(Files.readAllBytes(Paths.get("fff1"))).equals(firstStr));
         assertTrue(new String(Files.readAllBytes(Paths.get("fff2"))).equals(secondStr));
         assertTrue(new String(Files.readAllBytes(Paths.get("fff3"))).equals(thirdStr));
@@ -43,7 +44,7 @@ class SplitTextFileTest {
 
     @Test
     public void test2() throws IOException {
-        text.execute("split [-d] [-n 3] textFiles/align_in1.txt");
+        MainProgram.main("split -d -n 3 textFiles/align_in1.txt".split(" +"));
         assertTrue(new String(Files.readAllBytes(Paths.get("x1"))).equals(firstStr));
         assertTrue(new String(Files.readAllBytes(Paths.get("x2"))).equals(secondStr));
         assertTrue(new String(Files.readAllBytes(Paths.get("x3"))).equals(thirdStr));
@@ -54,7 +55,7 @@ class SplitTextFileTest {
 
     @Test
     public void test4() throws IOException {
-        text.execute("split [-n 3] [-o fff] textFiles/align_in1.txt");
+        MainProgram.main("split -n 3 -o fff textFiles/align_in1.txt".split(" +"));
         assertTrue(new String(Files.readAllBytes(Paths.get("fffaa"))).equals(firstStr));
         assertTrue(new String(Files.readAllBytes(Paths.get("fffab"))).equals(secondStr));
         assertTrue(new String(Files.readAllBytes(Paths.get("fffac"))).equals(thirdStr));
@@ -65,7 +66,7 @@ class SplitTextFileTest {
 
     @Test
     public void test5() throws IOException {
-        text.execute("split [-n 3] textFiles/align_in1.txt");
+        MainProgram.main("split -n 3 textFiles/align_in1.txt".split(" +"));
         assertTrue(new String(Files.readAllBytes(Paths.get("xaa"))).equals(firstStr));
         assertTrue(new String(Files.readAllBytes(Paths.get("xab"))).equals(secondStr));
         assertTrue(new String(Files.readAllBytes(Paths.get("xac"))).equals(thirdStr));
@@ -95,7 +96,7 @@ class SplitTextFileTest {
 
     @Test
     public void test6() throws IOException {
-        text.execute("split [-l 7] [-o -] textFiles/align_in1.txt");
+        MainProgram.main("split -l 7 -o - textFiles/align_in1.txt".split(" +"));
         assertTrue(new String(Files.readAllBytes(Paths.get("textFiles/align_in1.txtaa"))).equals(firstStr2));
         assertTrue(new String(Files.readAllBytes(Paths.get("textFiles/align_in1.txtab"))).equals(secondStr2));
         assertTrue(new String(Files.readAllBytes(Paths.get("textFiles/align_in1.txtac"))).equals(thirdStr2));
@@ -106,7 +107,7 @@ class SplitTextFileTest {
 
     @Test
     public void test7() throws IOException {
-        text.execute("split [-d] [-l 7] [-o fff] textFiles/align_in1.txt");
+        MainProgram.main("split -d -l 7 -o fff textFiles/align_in1.txt".split(" +"));
         assertTrue(new String(Files.readAllBytes(Paths.get("fff1"))).equals(firstStr2));
         assertTrue(new String(Files.readAllBytes(Paths.get("fff2"))).equals(secondStr2));
         assertTrue(new String(Files.readAllBytes(Paths.get("fff3"))).equals(thirdStr2));
@@ -117,7 +118,7 @@ class SplitTextFileTest {
 
     @Test
     public void test8() throws IOException {
-        text.execute("split [-d] [-l 7] textFiles/align_in1.txt");
+        MainProgram.main("split -d -l 7 textFiles/align_in1.txt".split(" +"));
         assertTrue(new String(Files.readAllBytes(Paths.get("x1"))).equals(firstStr2));
         assertTrue(new String(Files.readAllBytes(Paths.get("x2"))).equals(secondStr2));
         assertTrue(new String(Files.readAllBytes(Paths.get("x3"))).equals(thirdStr2));
@@ -128,7 +129,7 @@ class SplitTextFileTest {
 
     @Test
     public void test9() throws IOException {
-        text.execute("split [-l 7] [-o fff] textFiles/align_in1.txt");
+        MainProgram.main("split -l 7 -o fff textFiles/align_in1.txt".split(" +"));
         assertTrue(new String(Files.readAllBytes(Paths.get("fffaa"))).equals(firstStr2));
         assertTrue(new String(Files.readAllBytes(Paths.get("fffab"))).equals(secondStr2));
         assertTrue(new String(Files.readAllBytes(Paths.get("fffac"))).equals(thirdStr2));
@@ -139,7 +140,7 @@ class SplitTextFileTest {
 
     @Test
     public void test10() throws IOException {
-        text.execute("split [-l 7] textFiles/align_in1.txt");
+        MainProgram.main("split -l 7 textFiles/align_in1.txt".split(" +"));
         assertTrue(new String(Files.readAllBytes(Paths.get("xaa"))).equals(firstStr2));
         assertTrue(new String(Files.readAllBytes(Paths.get("xab"))).equals(secondStr2));
         assertTrue(new String(Files.readAllBytes(Paths.get("xac"))).equals(thirdStr2));
@@ -174,7 +175,7 @@ class SplitTextFileTest {
 
     @Test
     public void test11() throws IOException {
-        text.execute("split [-d] [-c 400] [-o fff] textFiles/align_in1.txt");
+        MainProgram.main("split -d -c 400 -o fff textFiles/align_in1.txt".split(" +"));
         String str = new String(Files.readAllBytes(Paths.get("fff1")));
         assertTrue(new String(Files.readAllBytes(Paths.get("fff1"))).equals(firstStr3));
         assertTrue(new String(Files.readAllBytes(Paths.get("fff2"))).equals(secondStr3));
@@ -188,7 +189,7 @@ class SplitTextFileTest {
 
     @Test
     public void test12() throws IOException {
-        text.execute("split [-d] [-c 400] textFiles/align_in1.txt");
+        MainProgram.main("split -d -c 400 textFiles/align_in1.txt".split(" +"));
         assertTrue(new String(Files.readAllBytes(Paths.get("x1"))).equals(firstStr3));
         assertTrue(new String(Files.readAllBytes(Paths.get("x2"))).equals(secondStr3));
         assertTrue(new String(Files.readAllBytes(Paths.get("x3"))).equals(thirdStr3));
@@ -201,7 +202,7 @@ class SplitTextFileTest {
 
     @Test
     public void test13() throws IOException {
-        text.execute("split [-c 400] [-o fff] textFiles/align_in1.txt");
+        MainProgram.main("split -c 400 -o fff textFiles/align_in1.txt".split(" +"));
         assertTrue(new String(Files.readAllBytes(Paths.get("fffaa"))).equals(firstStr3));
         assertTrue(new String(Files.readAllBytes(Paths.get("fffab"))).equals(secondStr3));
         assertTrue(new String(Files.readAllBytes(Paths.get("fffac"))).equals(thirdStr3));
@@ -214,7 +215,7 @@ class SplitTextFileTest {
 
     @Test
     public void test14() throws IOException {
-        text.execute("split [-c 400] textFiles/align_in1.txt");
+        MainProgram.main("split -c 400 textFiles/align_in1.txt".split(" +"));
         assertTrue(new String(Files.readAllBytes(Paths.get("xaa"))).equals(firstStr3));
         assertTrue(new String(Files.readAllBytes(Paths.get("xab"))).equals(secondStr3));
         assertTrue(new String(Files.readAllBytes(Paths.get("xac"))).equals(thirdStr3));
@@ -224,5 +225,4 @@ class SplitTextFileTest {
         new File("xac").delete();
         new File("xad").delete();
     }
-     */
 }
