@@ -1,4 +1,4 @@
-package classes;
+package SplitClasses;
 
 import java.io.*;
 import org.kohsuke.args4j.Argument;
@@ -14,7 +14,7 @@ public class SplitTextFile {
     @Option(name = "-l") private int sizeInLines = -1;
     @Option(name = "-c") private int sizeInSymbols = -1;
     @Option(name = "-n") private int sizeInAmountOfFiles = -1;
-    @Argument private String[] arguments;
+    @Argument(required = true) String inputName;
 
     private String getOutputNameWithCharAtTheEnd() {
         String temp = outputName;
@@ -51,9 +51,6 @@ public class SplitTextFile {
     }
 
     public void execute() throws IOException {
-        if (arguments.length != 2 || !arguments[0].equals("split"))
-            throw new IllegalArgumentException("Некорректный ввод");
-        String inputName = arguments[1];
         reader = new BufferedReader(new FileReader(inputName));
         count = 0;
         if (outputName.equals("-")) outputName = inputName;
