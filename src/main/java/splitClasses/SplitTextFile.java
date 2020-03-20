@@ -1,4 +1,4 @@
-package SplitClasses;
+package splitClasses;
 
 import java.io.*;
 import org.kohsuke.args4j.Argument;
@@ -29,7 +29,7 @@ public class SplitTextFile {
             writer = new BufferedWriter(new FileWriter(curOutputName));
         }
         writer.write(whatWrite);
-        count--;
+        if (!whatWrite.equals("\r")) count--;
         if (count == 0) {
             writer.close();
             numberOutputFile++;

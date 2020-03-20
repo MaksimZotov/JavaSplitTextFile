@@ -1,6 +1,6 @@
-package MainClasses;
+package mainClasses;
 
-import SplitClasses.SplitTextFile;
+import splitClasses.SplitTextFile;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 
